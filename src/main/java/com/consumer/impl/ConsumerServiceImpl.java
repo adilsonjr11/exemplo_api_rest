@@ -31,8 +31,8 @@ public class ConsumerServiceImpl implements ConsumerServices {
 	}
 
 	@Override
-	public List<Consumer> buscarPorConversationId(String id) {
-		return consumerRepository.buscarPorConversationId(id);
+	public List<Consumer> buscarPorConversationId(String conversationId) {
+		return consumerRepository.buscarPorConversationId(conversationId);
 	}
 
 }

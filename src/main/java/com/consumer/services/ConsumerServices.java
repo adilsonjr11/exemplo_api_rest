@@ -7,7 +7,7 @@ import com.consumer.entities.Consumer;
 
 public interface ConsumerServices {
 
-	Consumer buscarPorConsumer(String id);
+	Consumer buscarPorConsumer(String conversationId);
 
 	void salvarNome(String id, String name);
 

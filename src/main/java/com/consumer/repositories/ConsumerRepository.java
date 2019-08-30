@@ -10,12 +10,16 @@ import com.consumer.entities.Consumer;
 
 @Transactional(readOnly = true)
 public interface ConsumerRepository extends JpaRepository<ConsumerDto, String> {
-
+	
+	//TODO implementar a query que busca pelo id 
 	Consumer findByConsumer(String id);
-
+	
+	//TODO implementar a query que salva o id e nome
 	void salvarNome(String id, String name);
-
+	
+	//TODO implementar a query que atualiza o dado
 	void update(ConsumerDto consumerDto);
 
-	List<Consumer> buscarPorConversationId(String id);
+	//TODO implementar a query lista todos os registro
+	List<Consumer> buscarPorConversationId(String conversationId);
 }

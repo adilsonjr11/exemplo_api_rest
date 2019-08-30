@@ -1,6 +1,11 @@
 package com.consumer.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -31,21 +36,25 @@ public class ConsumerController {
 	@Autowired
 	private ConsumerServices services;
 	
-	@PostMapping(path = "/create/{id}/{name}")
-	public ResponseEntity<Response<Consumer>> cadastrar(
-			@PathVariable("id") String id, 
-			@PathVariable("name") String name) {
+	@PostMapping(path = "/{id}/{name}")
+	public ResponseEntity<Response<Consumer>> 
+		cadastrar(@PathVariable("id") String id, 
+				  @PathVariable("name") String name) {
 		
 		Response<Consumer> response = new Response<Consumer>();
-
+		
+		id = "36b9f842-ee97-11e8-9443-0242ac120002";
+		name = "Aureo";
+		
 		this.services.salvarNome(id, name);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Response<Consumer>> buscar(
-			@PathVariable("id") String id) 
+	public ResponseEntity<Response<Consumer>> buscar(@PathVariable("id") String id) 
 		throws JsonParseException, JsonMappingException, IOException {
+		
+		id = "36b9f842-ee97-11e8-9443-0242ac120002";
 		
 		Consumer consumer = services.buscarPorConsumer(id);
 		Response<Consumer> response = new Response<Consumer>();
@@ -54,11 +63,17 @@ public class ConsumerController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
-	@PostMapping()
+	@PostMapping(path = "/mensagens")
 	public ResponseEntity<Response<Consumer>> update(
 			@Valid @RequestBody ConsumerDto consumerDto) {
 		Response<Consumer> response = new Response<Consumer>();
-
+		
+		consumerDto.setConversationId("7665ada8-3448-4acd-a1b7-d688e68fe9a1");
+		consumerDto.setTimestamp(new Timestamp(convertDate().getDate()));
+		consumerDto.setFrom("36b9f842-ee97-11e8-9443-0242ac120002");
+		consumerDto.setTo("16edd3b3-3f75-40df-af07-2a3813a79ce9");
+		consumerDto.setText("\"Oi! Como posso te ajudar?");
+		
 		this.services.update(consumerDto);
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -70,6 +85,8 @@ public class ConsumerController {
 		throws JsonParseException, JsonMappingException, IOException {
 		
 		Consumer consumer = services.buscarPorConsumer(id);
+		
+		
 		Response<Consumer> response = new Response<Consumer>();
 		response.setData(consumer);
 		
@@ -81,10 +98,41 @@ public class ConsumerController {
 			@PathVariable("conversationId") String id) 
 		throws JsonParseException, JsonMappingException, IOException {
 		
-		List<Consumer> listConsumer = services.buscarPorConversationId(id);
+		id = "36b9f842-ee97-11e8-9443-0242ac120002";
+		
+		Consumer consumer = services.buscarPorConsumer(id);
+		
 		Response<Consumer> response = new Response<Consumer>();
-		response.setDatas(listConsumer);
+		response.setData(consumer);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+	
+	@GetMapping(path = "/mensagem/{conversationId}")
+	public ResponseEntity<Response<Consumer>> buscarAllConversationById(
+			@PathVariable("conversationId") String conversationId) 
+		throws JsonParseException, JsonMappingException, IOException {
+		
+		conversationId = "7665ada8-3448-4acd-a1b7-d688e68fe9a1";
+		
+		Consumer consumer = services.buscarPorConsumer(conversationId);
+		
+		Response<Consumer> response = new Response<Consumer>();
+		response.setData(consumer);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	public Date convertDate() {
+		String dateStr = "2018-11-16T23:30:52.6917722Z";
+		DateFormat df = new SimpleDateFormat("YY MM DD HH:mm:ss zzz");
+		Date date = null;
+		try {
+			date = df.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		};
+		return date;	
+	}
+	
 }
